@@ -7,7 +7,7 @@
 #include <locale.h>
 
 #define ToGB(bytes) (bytes/(1024.0*1024.0*1024.0))
-#define DEBUG 1
+#define DEBUG 0
 
 int read_int_from_file(char filename[]){
   FILE *file;

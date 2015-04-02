@@ -14,6 +14,7 @@ int read_int_from_file(char filename[]){
   int res = 0;
   file = fopen(filename, "rt");
   fscanf(file, "%d", &res);
+  fclose(file);
   return res;
 }
 
@@ -22,6 +23,7 @@ int read_char_from_file(char filename[]){
  int f_char;
   file = fopen(filename, "rt");
   f_char = fgetc(file);
+  fclose(file);
   return f_char;
 }
 

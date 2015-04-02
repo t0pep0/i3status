@@ -53,7 +53,7 @@ int battery_status(){
   const int ac_on = 67;
   b_stat = read_char_from_file("/sys/class/power_supply/BAT1/status");
   if (DEBUG) {
-    fprintf(stderr, "BATTERY STATUS: %d\n\r", b_stat);
+    fprintf(stderr, "BATTERY STATUS: %d\n", b_stat);
   }
   return (b_stat==ac_on);
 }
@@ -89,7 +89,9 @@ int main( int arg_count, char *argv[] ) {
       strcpy(battery_stat_label, "off");
     }
     now_time(time_now);
-    printf("Free space: %.0fGB | CPU: %.2f°C | Battery: %d%% AC:%s | %s\n\r", free_gb, cpu_t, battery, battery_stat_label, time_now);
+    fprintf(stdout, "Free space: %.2fGB | CPU: %.0f°C | Battery: %d%% AC:%s | %s", free_gb, cpu_t, battery, battery_stat_label, time_now);
+    fprintf(stdout,"\n");
+    fflush(stdout);
     sleep(1);
   }
   return 0;

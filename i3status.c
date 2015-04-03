@@ -8,6 +8,11 @@
 
 #define ToGB(bytes) (bytes/(1024.0*1024.0*1024.0))
 #define DEBUG 0
+#define TimeFormat "%a %d/%m/%Y %T"
+#define CpuTempFile "/sys/class/hwmon/hwmon0/temp2_input"
+#define BatFullChargeFile "/sys/class/power_supply/BAT1/charge_full"
+#define BatNowChargeFile "/sys/class/power_supply/BAT1/charge_now"
+#define BatStatusFile "/sys/class/power_supply/BAT1/status"
 
 int read_int_from_file(char filename[]){
   FILE *file;
@@ -37,7 +42,7 @@ long int disk_usage(){
 
 int cpu_therm(){
   int input = 0;
-  input = read_int_from_file("/sys/class/hwmon/hwmon0/temp2_input");
+  input = read_int_from_file(CpuTempFile);
   input = input*0.001;
   return input;
 }
@@ -45,15 +50,15 @@ int cpu_therm(){
 int battery_percent(){
   long int full_bat;
   long int now_bat;
-  full_bat = read_int_from_file("/sys/class/power_supply/BAT1/charge_full");
-  now_bat = read_int_from_file("/sys/class/power_supply/BAT1/charge_now");
+  full_bat = read_int_from_file(BatFullChargeFile);
+  now_bat = read_int_from_file(BatNowChargeFile);
   return now_bat*100/full_bat;
 }
 
 int battery_status(){
   int b_stat = 0;
   const int ac_on = 67;
-  b_stat = read_char_from_file("/sys/class/power_supply/BAT1/status");
+  b_stat = read_char_from_file(BatStatusFile);
   if (DEBUG) {
     fprintf(stderr, "BATTERY STATUS: %d\n", b_stat);
   }
@@ -65,7 +70,7 @@ char *now_time(char *buffer){
   struct tm * timeinfo;
   time(&rawtime);
   timeinfo = localtime ( &rawtime );
-  strftime(buffer, 80, "%c", timeinfo);
+  strftime(buffer, 80, TimeFormat, timeinfo);
   return buffer;
 }
 
